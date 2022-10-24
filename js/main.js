@@ -121,8 +121,8 @@ function drawCard(){
 }
 
 //funzione per assegnare evento al btn like
-    const btnLike = document.querySelector('likes__cta');
-    const iconLike = document.querySelector('js-like-button');
+    const btnLike = document.querySelector('.likes__cta');
+    const iconLike = document.querySelector('.js-like-button');
     console.log(btnLike);
     console.log(iconLike);
 function effettoBtn(){
