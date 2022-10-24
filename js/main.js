@@ -1,7 +1,12 @@
-'use strict';
+"use strict";
 
 /*
  CONSEGNA ESERCIZIO
+
+Milestone 3
+Se clicchiamo sul tasto "Mi Piace" cambiamo il colore al testo del bottone
+e incrementiamo il counter dei likes relativo.
+Salviamo in un secondo array gli id dei post ai quali abbiamo messo il like.
 */
 
 const posts = [
@@ -66,13 +71,16 @@ const posts = [
 //prendo elementi da HTML-------------------------------------------------------------------------
 const contenitoreHTML = document.getElementById('container');
 
+
 //FUNZIONI-------------------------------------------------------------------------
 
 //funzione peer creare dinamicamente le card
-
 function drawCard(){
     posts.forEach((value, index) =>{
         const card = document.createElement('div');
+        if(value.index == null){
+
+        }
 
         card.innerHTML = `
         <div class="post">
@@ -94,9 +102,9 @@ function drawCard(){
         <div class="post__footer">
             <div class="likes js-likes">
                 <div class="likes__cta">
-                    <a class="like-button  js-like-button" href="#" data-postid="1">
+                    <a class="like-button js-like-button" href="#" data-postid="1">
                         <i class="like-button__icon fas fa-thumbs-up" aria-hidden="true"></i>
-                        <span class="like-button__label">Mi Piace</span>
+                        <span class="like-button__label ">Mi Piace</span>
                     </a>
                 </div>
                 <div class="likes__counter">
@@ -106,10 +114,25 @@ function drawCard(){
         </div>            
     </div>
         `;
-        
+
        contenitoreHTML.append(card);
     }) 
+
 }
+
+//funzione per assegnare evento al btn like
+    const btnLike = document.querySelector('likes__cta');
+    const iconLike = document.querySelector('js-like-button');
+    console.log(btnLike);
+    console.log(iconLike);
+function effettoBtn(){
+
+    btnLike.addEventListener('click', function(){
+        iconLike.classList.toggle('like-button__label');
+        iconLike.classList.toggle('like-button--liked');
+    })
+}
+
 
 //RICHIAMO FUNZIONI-------------------------------------------------------------------------
 drawCard();
