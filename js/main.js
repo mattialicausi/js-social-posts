@@ -116,23 +116,34 @@ function drawCard(){
         `;
 
        contenitoreHTML.append(card);
+       //console.log(card)
+
     }) 
 
 }
+drawCard();
+
 
 //funzione per assegnare evento al btn like
-    const btnLike = document.querySelector('.likes__cta');
-    const iconLike = document.querySelector('.js-like-button');
+    let btnLike = document.querySelectorAll('.likes__cta');
+    let iconLike = document.querySelectorAll('.js-like-button');
+    let contatore = 0;
     console.log(btnLike);
     console.log(iconLike);
-function effettoBtn(){
+    for(let i = 0; i < posts.length; i++){
+        btnLike[i].addEventListener('click', cambiaColore);
+        console.log(btnLike[i]);
+    }
+    
+    function cambiaColore(){
+        iconLike.classList.add('like-button__label');
+        iconLike.classList.add('like-button--liked');
+        console.log('click cambia colore')
+    }
 
-    btnLike.addEventListener('click', function(){
-        iconLike.classList.toggle('like-button__label');
-        iconLike.classList.toggle('like-button--liked');
-    })
-}
+    
+
+
 
 
 //RICHIAMO FUNZIONI-------------------------------------------------------------------------
-drawCard();
