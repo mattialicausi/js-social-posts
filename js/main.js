@@ -1,14 +1,5 @@
 "use strict";
 
-/*
- CONSEGNA ESERCIZIO
-
-Milestone 3
-Se clicchiamo sul tasto "Mi Piace" cambiamo il colore al testo del bottone
-e incrementiamo il counter dei likes relativo.
-Salviamo in un secondo array gli id dei post ai quali abbiamo messo il like.
-*/
-
 const posts = [
     {
         "id": 1,
@@ -70,24 +61,21 @@ const posts = [
 
 //prendo elementi da HTML-------------------------------------------------------------------------
 const contenitoreHTML = document.getElementById('container');
-
+const userLiked = [];
 
 //FUNZIONI-------------------------------------------------------------------------
 
 //funzione peer creare dinamicamente le card
 function drawCard(){
     posts.forEach((value, index) =>{
-        const card = document.createElement('div');
-        if(value.index == null){
+        const cards = document.createElement('div');
 
-        }
-
-        card.innerHTML = `
-        <div class="post">
+       cards.innerHTML = `
+       <div class="post">
         <div class="post__header">
             <div class="post-meta">                    
                 <div class="post-meta__icon">
-                    <img class="profile-pic" src="${value.author.image}" alt="Phil Mangione">                    
+                    <img class="profile-pic" src="${value.author.image}" alt="${value.author.image}">                    
                 </div>
                 <div class="post-meta__data">
                     <div class="post-meta__author">${value.author.name}</div>
@@ -97,53 +85,74 @@ function drawCard(){
         </div>
         <div class="post__text">${value.content}</div>
         <div class="post__image">
-            <img src="${value.media}" alt="">
+            <img src="${value.media}" alt="Foto post ${value.id}">
         </div>
         <div class="post__footer">
             <div class="likes js-likes">
                 <div class="likes__cta">
-                    <a class="like-button js-like-button" href="#" data-postid="1">
+                    <a class="like-button js-like-button" href="#" data-postid="${value.id}">
                         <i class="like-button__icon fas fa-thumbs-up" aria-hidden="true"></i>
                         <span class="like-button__label ">Mi Piace</span>
                     </a>
                 </div>
                 <div class="likes__counter">
-                    Piace a <b id="like-counter-1" class="js-likes-counter">${value.likes}</b> persone
+                    Piace a <b id="like-counter-${value.id}" class="js-likes-counter">${value.likes}</b> persone
                 </div>
             </div> 
         </div>            
     </div>
         `;
-
-       contenitoreHTML.append(card);
-       //console.log(card)
+       contenitoreHTML.append(cards);
 
     }) 
 
 }
 drawCard();
 
+//funzione per aggiungere evento al bottone
+const likeButton = Array.from(document.querySelectorAll('.like-button'));
+//console.log(likeButton);
 
-//funzione per assegnare evento al btn like
-    let btnLike = document.querySelectorAll('.likes__cta');
-    let iconLike = document.querySelectorAll('.js-like-button');
-    let contatore = 0;
-    console.log(btnLike);
-    console.log(iconLike);
-    for(let i = 0; i < posts.length; i++){
-        btnLike[i].addEventListener('click', cambiaColore);
-        console.log(btnLike[i]);
-    }
-    
-    function cambiaColore(){
-        iconLike.classList.add('like-button__label');
-        iconLike.classList.add('like-button--liked');
-        console.log('click cambia colore')
-    }
+likeButton.forEach((el, index)=>{
+    el.addEventListener('click', function(e){
+        // evito che venga refreshata la pagina
+        e.preventDefault();
+        // inverto classe per cambiare colore
+        el.classList.toggle('like-button--liked');
+        // prendo id del post dal dataset
+        const postId = parseInt(el.dataset.postid);
+        // prendo elemento contenitore del numero dei likes
+        const likes = document.getElementById('like-counter-' + postId);
+        // recupero dall'array dei post indice del post corrente 
+        const postIndex = posts.findIndex((value)=>{
+            return value.id === postId;
+        })
+        if(postIndex === -1) return;
+        //recupero dall'array dei post preferiti (liked) indice di quel id se c'è, se no torna -1 (indexOf)
+        const likeIndex = userLiked.indexOf(postId);
+        //controllo se l'indice trovato è o meno e se è -1
+        if(likeIndex !== -1){
+            // trovato indice e decremento i like e rimuovo id elemento da array
+            posts[postIndex].likes -= 1;
+            userLiked.splice(likeIndex, 1);
+        } else{
+            // il valore di ritorno era -1 quindi id non era presente nell'array dei like
+            // incremento i like e pusho id nell'array dei like
+            posts[postIndex].likes += 1;
+            userLiked.push(postId);
+            
+        }
+        // inserisco il nuovo valore del numero dei like
+        likes.innerHTML = posts[postIndex].likes;
+        console.log(userLiked);
+    })
+})
 
-    
 
 
 
 
-//RICHIAMO FUNZIONI-------------------------------------------------------------------------
+
+
+
+  
